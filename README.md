@@ -14,6 +14,7 @@ Ketiga layanan ini dihubungkan melalui jaringan internal yang dibuat oleh Docker
 Pastikan Docker dan Docker Compose sudah ter-install di sistem Anda.
 
 1. **Siapkan Semua Repositori**
+
 Pastikan repositori backend dan frontend sudah di-clone dan berada di dalam direktori yang sama dengan file docker-compose.yml ini.
 
 ```
@@ -24,9 +25,12 @@ FinalProject_Kel3/
 ```
 
 2. **Jalankan dengan Docker Compose**
+
 Buka terminal di direktori utama, lalu jalankan perintah berikut:
 
-`docker-compose up -d --build`
+```
+docker-compose up -d --build
+```
 
 Perintah ini akan membangun image untuk backend dan frontend, mengunduh image MongoDB, lalu menjalankan ketiga container di latar belakang.
 
