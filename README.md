@@ -21,7 +21,7 @@ Pastikan repositori backend dan frontend sudah di-clone dan berada di dalam dire
 FinalProject_Kel3/
 ├── ngobrol_yuk/         <-- Repositori Backend
 ├── nobrolyuk-frontend/  <-- Repositori Frontend
-└── docker-compose.yml   <-- File ini
+└── docker-compose.yml   <-- Repository Docker Compose
 ```
 
 **2. Jalankan dengan Docker Compose**
