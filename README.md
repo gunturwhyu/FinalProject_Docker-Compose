@@ -7,8 +7,9 @@ Proyek ini menerapkan arsitektur multi-container di mana setiap layanan utama be
 - **frontend-service**: Menjalankan aplikasi React + Vite yang sudah di-build.
 - **backend-service**: Menjalankan API yang dibangun dari Go (Golang) dengan Fiber Framework.
 - **database-mongo**: Menjalankan instance MongoDB sebagai penyimpan data.
+- **Nginx-Proxy**: (Diimplementasikan di VPS) Bertindak sebagai reverse proxy yang mengarahkan lalu lintas dari internet ke container yang sesuai.
 
-Ketiga layanan ini dihubungkan melalui jaringan internal yang dibuat oleh Docker Compose, memungkinkan mereka untuk berkomunikasi satu sama lain.
+Keempat layanan ini dihubungkan melalui jaringan internal yang dibuat oleh Docker Compose, memungkinkan mereka untuk berkomunikasi satu sama lain.
 
 ## ⚙️ Cara Menjalankan
 Pastikan Docker dan Docker Compose sudah ter-install di sistem Anda.
@@ -19,7 +20,7 @@ Pastikan repositori backend dan frontend sudah di-clone dan berada di dalam dire
 
 ```
 FinalProject_Kel3/
-├── ngobrol_yuk/         <-- Repositori Backend
+├── ngobrol_yuk_backend/ <-- Repositori Backend
 ├── nobrolyuk-frontend/  <-- Repositori Frontend
 └── docker-compose.yml   <-- Repository Docker Compose
 ```
@@ -38,6 +39,18 @@ Perintah ini akan membangun image untuk backend dan frontend, mengunduh image Mo
 - Frontend: Buka browser dan kunjungi `http://localhost:3000`
 - Backend API: Dapat diakses di `http://localhost:8080`
 
+## ✨ Deployment Otomatis (CI/CD)
+Proyek ini telah dilengkapi dengan alur kerja Continuous Integration/Continuous Deployment (CI/CD) menggunakan GitHub Actions untuk mendapatkan nilai tambah.
+
+**Cara Kerjanya:**
+1. Pemicu: Workflow akan berjalan secara otomatis setiap kali ada push baru ke branch master di repositori ini.
+2. Proses: "Robot" GitHub Actions akan:
+- Masuk ke server VPS secara aman menggunakan Kunci SSH yang disimpan di GitHub Secrets.
+- Menjalankan git pull di semua direktori proyek (deployment, backend, frontend) untuk mengambil kode terbaru.
+- Menjalankan ulang sudo docker-compose up -d --build untuk membangun ulang image yang berubah dan menerapkan pembaruan tanpa downtime yang signifikan.
+- Dengan adanya CI/CD, proses deployment menjadi efisien, konsisten, dan bebas dari kesalahan manual.
+
 ## 📦 Repositori Terkait
-- Backend (Go): https://github.com/Adisonsmn/ngobrol_yuk
+- Backend (Go): https://github.com/Adisonsmn/ngobrol_yuk_backend
 - Frontend (React): https://github.com/anandamarachel/nobrolyuk-frontend
+

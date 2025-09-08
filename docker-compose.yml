@@ -1,22 +1,24 @@
+# docker-compose.yml
+version: '3.8'
+
 services:
   # Layanan untuk Frontend (React + Nginx)
   frontend:
     build: ./nobrolyuk-frontend
     container_name: frontend-service
     ports:
-      - "3000:80" # Akses frontend melalui http://localhost:3000
+      - "3000:80"
     depends_on:
       - backend
 
   # Layanan untuk Backend (Go)
   backend:
-    build: ./ngobrol_yuk
+    build: ./ngobrol_yuk_backend
     container_name: backend-service
     ports:
-      - "8080:8080" # Akses backend melalui http://localhost:8080
+      - "8080:8080"
     environment:
-      # Variabel environment yang dibutuhkan oleh backend untuk terhubung ke database
-      # Pastikan nama variabel ini sesuai dengan yang ada di kode Go
+      # Variabel environment yang dibutuhkan oleh backend
       - MONGO_URI=mongodb://mongo:27017/ngobrolyuk
       - JWT_SECRET=ganti_dengan_secret_key_yang_aman_dan_panjang
       - PORT=8080
@@ -32,6 +34,5 @@ services:
     volumes:
       - mongo-data:/data/db
 
-# Mendefinisikan volume untuk menyimpan data database secara permanen
 volumes:
   mongo-data:
