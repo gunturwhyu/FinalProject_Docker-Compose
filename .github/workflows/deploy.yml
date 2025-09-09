@@ -3,31 +3,31 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - master
+      - master # Pastikan nama branch utama Anda adalah 'master'
 
 jobs:
   deploy:
+    # Menjalankan di server virtual milik GitHub
     runs-on: ubuntu-latest
     steps:
+      # Langkah utama: Masuk ke VPS dan jalankan serangkaian perintah
       - name: SSH to VPS and Deploy
         uses: appleboy/ssh-action@master
         with:
+          # Mengambil nilai dari Secrets yang akan Anda atur di repo baru
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          script:
-            # 1. Pindah ke direktori proyek utama di VPS Anda
+          
+          # Perintah yang akan dijalankan di dalam VPS
+          script: |
+            # 1. Pindah ke direktori proyek utama di VPS
             cd /home/radens/FinalProject_Docker-Compose
-
-            # 2. Tarik (pull) perubahan kode terbaru dari GitHub
-            # Perintah ini akan memperbarui semua folder, termasuk backend dan frontend
+            
+            # 2. Tarik (pull) kode terbaru dari GitHub.
+            # Ini akan memperbarui semua folder (backend & frontend) sekaligus.
             git pull origin master
-
-            # 3. Hentikan container yang sedang berjalan (praktik terbaik)
-            docker compose down
-
-            # 4. Bangun ulang image dan jalankan container di background
-            docker compose up -d --build
-
-            # 5. (Opsional) Bersihkan image Docker yang sudah tidak terpakai
-            docker image prune -f
+            
+            # 3. Bangun ulang dan jalankan aplikasi menggunakan Docker Compose
+            # Menggunakan 'sudo' seperti di script awal Anda untuk memastikan izinnya cukup
+            sudo docker-compose up -d --build
