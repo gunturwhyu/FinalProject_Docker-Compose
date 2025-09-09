@@ -5,29 +5,31 @@ on:
     branches:
       - master
 
-# Pekerjaan yang akan dilakukan
 jobs:
   deploy:
-    # Menjalankan di server virtual Ubuntu
+    # Menjalankan di server virtual Ubuntu milik GitHub
     runs-on: ubuntu-latest
     steps:
-      # Langkah 1: Masuk ke VPS dan jalankan perintah
+      # Langkah utama: Masuk ke VPS dan jalankan serangkaian perintah
       - name: SSH to VPS and Deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          script: |
-            # Masuk ke direktori proyek utama di VPS dan tarik perubahan
-            cd /home/radens/FinalProject_Docker-Compose && git pull
-
-            # Masuk ke direktori backend dan tarik perubahan
-            cd /home/radens/ngobrol_yuk && git pull
-
-            # Masuk ke direktori frontend dan tarik perubahan
-            cd /home/radens/nobrolyuk-frontend && git pull
-
-            # Kembali ke direktori utama dan deploy ulang
+          script:
+            # 1. Pindah ke direktori proyek utama di VPS Anda
             cd /home/radens/FinalProject_Docker-Compose
-            sudo docker-compose up -d --build
+
+            # 2. Tarik (pull) perubahan kode terbaru dari GitHub
+            # Perintah ini akan memperbarui semua folder, termasuk backend dan frontend
+            git pull origin master
+
+            # 3. Hentikan container yang sedang berjalan (praktik terbaik)
+            docker compose down
+
+            # 4. Bangun ulang image dan jalankan container di background
+            docker compose up -d --build
+
+            # 5. (Opsional) Bersihkan image Docker yang sudah tidak terpakai
+            docker image prune -f
