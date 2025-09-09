@@ -7,10 +7,8 @@ on:
 
 jobs:
   deploy:
-    # Menjalankan di server virtual Ubuntu milik GitHub
     runs-on: ubuntu-latest
     steps:
-      # Langkah utama: Masuk ke VPS dan jalankan serangkaian perintah
       - name: SSH to VPS and Deploy
         uses: appleboy/ssh-action@master
         with:
